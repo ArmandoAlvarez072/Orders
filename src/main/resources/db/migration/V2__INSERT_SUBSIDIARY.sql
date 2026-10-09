@@ -1,0 +1,1 @@
+INSERT INTO subsidiary(name) VALUES ('TRUPER');
