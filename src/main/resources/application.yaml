@@ -28,3 +28,7 @@ server:
     include-message: always
     include-binding-errors: always
 
+app:
+  jwt:
+    secret: ${JWT_SECRET:d79024ad-f1f3-44a2-8651-769694f6fa31}
+    expiration-ms: 1800000

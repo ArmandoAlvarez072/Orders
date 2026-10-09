@@ -1,7 +1,6 @@
 package com.armandoalvarez.orders.dto.request;
 
 import jakarta.validation.constraints.*;
-
 import java.util.List;
 
 public record OrderRequest(
@@ -12,7 +11,7 @@ public record OrderRequest(
 
         @NotNull
         @NotEmpty
-        List<ProductRequest> products
+        List<OrderProductRequest> products
 
 ) {
 }

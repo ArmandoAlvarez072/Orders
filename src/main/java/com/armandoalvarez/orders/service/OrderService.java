@@ -2,14 +2,14 @@ package com.armandoalvarez.orders.service;
 
 import com.armandoalvarez.orders.common.mapper.OrderMapper;
 import com.armandoalvarez.orders.common.mapper.ProductMapper;
+import com.armandoalvarez.orders.dto.request.OrderProductRequest;
 import com.armandoalvarez.orders.dto.request.OrderRequest;
-import com.armandoalvarez.orders.dto.request.ProductRequest;
 import com.armandoalvarez.orders.dto.response.OrderResponse;
-import com.armandoalvarez.orders.dto.response.ProductResponse;
 import com.armandoalvarez.orders.entity.Order;
 import com.armandoalvarez.orders.entity.OrderProduct;
 import com.armandoalvarez.orders.entity.Product;
 import com.armandoalvarez.orders.entity.Subsidiary;
+import com.armandoalvarez.orders.exception.ResourceNotFoundException;
 import com.armandoalvarez.orders.repository.OrderProductRepository;
 import com.armandoalvarez.orders.repository.OrderRepository;
 import com.armandoalvarez.orders.repository.ProductRepository;
@@ -39,7 +39,7 @@ public class OrderService {
         Subsidiary subsidiary = findSubsidiaryByNameOrThrows(request.subsidiaryName());
         List<Product> products = new ArrayList<>();
 
-        for (ProductRequest productRequest : request.products()) {
+        for (OrderProductRequest productRequest : request.products()) {
             Product product = findProductByCodeOrThrows(productRequest.code());
             products.add(product);
         }
@@ -75,15 +75,15 @@ public class OrderService {
 
 
     private Subsidiary findSubsidiaryByNameOrThrows(String name) {
-        return subsidiaryRepository.findByName(name).orElseThrow(RuntimeException::new);
+        return subsidiaryRepository.findByName(name).orElseThrow(() -> ResourceNotFoundException.of("subsidiary", "name", name));
     }
 
     private Product findProductByCodeOrThrows(String code) {
-        return productRepository.findByCode(code).orElseThrow(RuntimeException::new);
+        return productRepository.findByCode(code).orElseThrow(() -> ResourceNotFoundException.of("product", "code", code));
     }
 
     private Order findOrderByIdOrThrows(Integer id) {
-        return orderRepository.findById(id).orElseThrow(RuntimeException::new);
+        return orderRepository.findById(id).orElseThrow(() -> ResourceNotFoundException.of("order", "id", id));
     }
 
     private List<OrderProduct> findProductsByOrder(Integer id) {
